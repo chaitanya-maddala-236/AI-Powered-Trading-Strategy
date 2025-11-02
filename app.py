@@ -700,9 +700,194 @@ if 'run' in st.session_state and st.session_state.run:
             st.download_button("💾 Price Data", data_csv, "price_data.csv", "text/csv")
         
         # FINAL SUMMARY
-        st.markdown("""
+        st.markdown(f"""
         <div class="info-box">
             <h3>✅ Analysis Complete!</h3>
             <p><strong>What Just Happened:</strong></p>
             <ul style="text-align: left; line-height: 1.8;">
-                <li>
+                <li>📊 Analyzed {len(data.columns)} stocks from {stock_universe}</li>
+                <li>🤖 K-Means algorithm created {n_clusters} clusters based on 9 technical indicators</li>
+                <li>🎯 Selected Cluster {best_cluster} with highest Sharpe ratio ({cluster_stats.loc[best_cluster, 'sharpe_ratio']:.3f})</li>
+                <li>💼 Built portfolio of top {actual_top_n} stocks: {', '.join(top_stocks[:3])}{'...' if len(top_stocks) > 3 else ''}</li>
+                <li>📈 Portfolio {'outperformed' if total_return > sp500_total_return else 'underperformed'} S&P 500 by {abs(total_return - sp500_total_return):.2f}%</li>
+            </ul>
+        </div>
+        """, unsafe_allow_html=True)
+        
+    except Exception as e:
+        st.error(f"❌ Error: {str(e)}")
+        with st.expander("🔍 Error Details"):
+            st.exception(e)
+
+else:
+    # LANDING PAGE
+    st.markdown("""
+    <div class='info-box'>
+        <h3>🚀 Ready to Discover Alpha?</h3>
+        <p style='font-size: 1.1rem; margin-bottom: 0;'>
+            Configure your strategy above and click <b>"RUN BACKTEST NOW"</b> to see the power of AI-driven portfolio selection!
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    col1, col2, col3 = st.columns(3)
+    
+    with col1:
+        st.markdown("""
+        <div class="feature-card">
+            <h3>🤖 Machine Learning</h3>
+            <p>K-Means clustering automatically identifies stocks with similar risk-return characteristics, grouping them into distinct performance profiles.</p>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    with col2:
+        st.markdown("""
+        <div class="feature-card">
+            <h3>📊 9 Key Indicators</h3>
+            <p>Analyzes returns, volatility, Sharpe ratio, momentum (1M-12M), RSI, and maximum drawdown for comprehensive stock evaluation.</p>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    with col3:
+        st.markdown("""
+        <div class="feature-card">
+            <h3>💹 Risk-Adjusted Selection</h3>
+            <p>Selects portfolios based on Sharpe ratio optimization, ensuring you get the best returns for each unit of risk taken.</p>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    # QUICK START GUIDE
+    st.markdown('<p class="section-title">📖 How It Works - Step by Step</p>', unsafe_allow_html=True)
+    
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        st.markdown("""
+        <div class="guide-section">
+            <h4>1️⃣ Choose Your Stock Universe</h4>
+            <p>Select from 7 curated lists:</p>
+            <ul>
+                <li>🚀 Tech Giants (AAPL, MSFT, GOOGL...)</li>
+                <li>💼 Blue Chips (JPM, JNJ, PG...)</li>
+                <li>📈 Growth Stocks (NVDA, AMD...)</li>
+                <li>🏆 S&P 500 Top 50</li>
+                <li>💰 Financial Sector</li>
+                <li>⚡ Energy Sector</li>
+                <li>🏥 Healthcare Sector</li>
+            </ul>
+        </div>
+        
+        <div class="guide-section">
+            <h4>2️⃣ Set Your Parameters</h4>
+            <p>Customize the analysis:</p>
+            <ul>
+                <li><strong>Clusters:</strong> 3-8 groups (more = finer segmentation)</li>
+                <li><strong>Portfolio Size:</strong> 3-15 stocks</li>
+                <li><strong>Date Range:</strong> Your backtest period</li>
+            </ul>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    with col2:
+        st.markdown("""
+        <div class="guide-section">
+            <h4>3️⃣ Run the Analysis</h4>
+            <p>The AI does the heavy lifting:</p>
+            <ul>
+                <li>📥 Downloads historical price data</li>
+                <li>🔬 Calculates 9 technical indicators per stock</li>
+                <li>🤖 Runs K-Means clustering algorithm</li>
+                <li>🎯 Identifies best-performing cluster</li>
+                <li>💼 Selects top stocks by Sharpe ratio</li>
+                <li>📊 Backtests vs S&P 500 benchmark</li>
+            </ul>
+        </div>
+        
+        <div class="guide-section">
+            <h4>4️⃣ Review & Download Results</h4>
+            <p>Get comprehensive outputs:</p>
+            <ul>
+                <li>📊 Performance metrics & charts</li>
+                <li>🎯 Cluster analysis & visualization</li>
+                <li>💼 Selected portfolio details</li>
+                <li>📥 Downloadable CSV reports</li>
+            </ul>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    # EXAMPLE OUTPUT PREVIEW
+    st.markdown('<p class="section-title">👀 What You\'ll Get</p>', unsafe_allow_html=True)
+    
+    st.markdown("""
+    <div class="output-summary">
+        <h2>📋 Sample Output Summary</h2>
+        <div class="summary-metric">
+            <strong>📊 Strategy Performance:</strong> Your AI-selected portfolio achieved a total return of <strong style="color: green;">45.32%</strong> 
+            compared to S&P 500's 28.15% (outperformance: +17.17%)
+        </div>
+        <div class="summary-metric">
+            <strong>📈 Risk-Adjusted Returns:</strong> Sharpe Ratio of <strong style="color: #667eea;">1.423</strong> 
+            vs S&P 500's 1.087, indicating superior risk-adjusted performance
+        </div>
+        <div class="summary-metric">
+            <strong>⚠️ Risk Metrics:</strong> Maximum drawdown was <strong>-18.45%</strong> with 
+            annualized volatility of 22.34%
+        </div>
+        <div class="summary-metric">
+            <strong>🤖 ML Insights:</strong> K-Means identified 5 distinct clusters. 
+            The best performing cluster contained 12 stocks with average Sharpe ratio of 1.234
+        </div>
+        <div class="summary-metric">
+            <strong>💼 Selected Portfolio:</strong> AAPL, NVDA, MSFT, GOOGL, META
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # KEY FEATURES
+    st.markdown('<p class="section-title">✨ Key Features</p>', unsafe_allow_html=True)
+    
+    col1, col2, col3, col4 = st.columns(4)
+    
+    with col1:
+        st.markdown("""
+        <div class="feature-card">
+            <h3>⚡ Fast</h3>
+            <p>Results in 30-60 seconds</p>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    with col2:
+        st.markdown("""
+        <div class="feature-card">
+            <h3>🎯 Accurate</h3>
+            <p>9 technical indicators</p>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    with col3:
+        st.markdown("""
+        <div class="feature-card">
+            <h3>📊 Visual</h3>
+            <p>Interactive charts</p>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    with col4:
+        st.markdown("""
+        <div class="feature-card">
+            <h3>📥 Exportable</h3>
+            <p>Download all data</p>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    # DISCLAIMER
+    st.markdown("""
+    <div class="guide-section">
+        <h4>⚠️ Important Disclaimer</h4>
+        <p>This tool is for educational and research purposes only. Past performance does not guarantee future results. 
+        Always conduct your own research and consult with financial advisors before making investment decisions. 
+        The creators are not responsible for any financial losses incurred from using this tool.</p>
+    </div>
+    """, unsafe_allow_html=True)
+
+st.markdown('</div>', unsafe_allow_html=True)
