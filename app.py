@@ -14,146 +14,215 @@ warnings.filterwarnings("ignore")
 
 # Page configuration
 st.set_page_config(
-    page_title="AI-Powered Trading Strategy",
+    page_title="AI Trading Strategy",
     layout="wide",
     page_icon="🤖",
-    initial_sidebar_state="expanded"
+    initial_sidebar_state="collapsed"
 )
 
-# Custom CSS for better UI
+# Custom CSS for amazing UI
 st.markdown("""
 <style>
+    /* Hide sidebar by default */
+    [data-testid="collapsedControl"] {
+        display: none;
+    }
+    
+    /* Main container */
     .main {
-        padding: 0rem 1rem;
+        padding: 0rem 2rem;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     }
+    
+    .main > div {
+        background: white;
+        border-radius: 20px;
+        padding: 2rem;
+        margin-top: 1rem;
+    }
+    
+    /* Hero section */
+    .hero {
+        text-align: center;
+        padding: 3rem 2rem;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 20px;
+        color: white;
+        margin-bottom: 2rem;
+    }
+    
+    .hero h1 {
+        font-size: 3.5rem;
+        font-weight: 800;
+        margin: 0;
+        color: white !important;
+    }
+    
+    .hero p {
+        font-size: 1.3rem;
+        margin-top: 1rem;
+        opacity: 0.95;
+    }
+    
+    /* Control panel */
+    .control-panel {
+        background: white;
+        border-radius: 15px;
+        padding: 2rem;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        margin-bottom: 2rem;
+    }
+    
+    /* Metric cards */
     .stMetric {
-        background-color: #f0f2f6;
-        padding: 15px;
-        border-radius: 10px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        padding: 1.5rem;
+        border-radius: 15px;
+        color: white;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
     }
-    .stMetric:hover {
-        box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-        transform: translateY(-2px);
-        transition: all 0.3s ease;
+    
+    .stMetric label {
+        color: white !important;
+        font-size: 1rem !important;
+        font-weight: 600 !important;
     }
-    h1 {
-        color: #1f77b4;
-        font-weight: 700;
-        padding-bottom: 1rem;
-        border-bottom: 3px solid #1f77b4;
+    
+    .stMetric [data-testid="stMetricValue"] {
+        color: white !important;
+        font-size: 2rem !important;
+        font-weight: 700 !important;
     }
-    h2 {
-        color: #2c3e50;
-        margin-top: 2rem;
-        padding: 0.5rem 0;
-        border-left: 5px solid #1f77b4;
-        padding-left: 10px;
-    }
-    h3 {
-        color: #34495e;
-    }
-    .sidebar .sidebar-content {
-        background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
-    }
+    
+    /* Buttons */
     .stButton>button {
         width: 100%;
         background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
         color: white;
-        font-weight: 600;
+        font-weight: 700;
         border: none;
-        padding: 0.75rem;
-        border-radius: 10px;
+        padding: 1rem 3rem;
+        border-radius: 50px;
+        font-size: 1.2rem;
         transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
     }
+    
     .stButton>button:hover {
-        transform: scale(1.05);
-        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
     }
+    
+    /* Section headers */
+    h2 {
+        color: #667eea;
+        font-size: 2rem;
+        font-weight: 700;
+        margin-top: 3rem;
+        margin-bottom: 1rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 3px solid #667eea;
+    }
+    
+    /* Info boxes */
     .info-box {
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        padding: 20px;
-        border-radius: 10px;
-        color: white;
-        margin: 20px 0;
-    }
-    .metric-card {
-        background: white;
-        padding: 20px;
+        padding: 2rem;
         border-radius: 15px;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.07);
-        margin: 10px 0;
-        border-left: 4px solid #1f77b4;
+        color: white;
+        margin: 2rem 0;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    }
+    
+    .info-box h3 {
+        margin-top: 0;
+        color: white;
+    }
+    
+    /* Expander */
+    .streamlit-expanderHeader {
+        background: #f8f9fa;
+        border-radius: 10px;
+        font-weight: 600;
+    }
+    
+    /* Progress bar */
+    .stProgress > div > div > div > div {
+        background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
     }
 </style>
 """, unsafe_allow_html=True)
 
-# Header with logo effect
-col1, col2, col3 = st.columns([1, 2, 1])
-with col2:
-    st.markdown("""
-    <div style='text-align: center; padding: 20px;'>
-        <h1 style='font-size: 3rem; margin: 0; background: linear-gradient(90deg, #667eea 0%, #764ba2 100%); 
-        -webkit-background-clip: text; -webkit-text-fill-color: transparent; border: none;'>
-            🤖 AI Trading Strategy
-        </h1>
-        <p style='font-size: 1.2rem; color: #7f8c8d; margin-top: 10px;'>
-            Unsupervised Learning Meets Quantitative Finance
-        </p>
-    </div>
-    """, unsafe_allow_html=True)
+# Hero Section
+st.markdown("""
+<div class='hero'>
+    <h1>🤖 AI-Powered Trading Strategy</h1>
+    <p>Machine Learning Meets Quantitative Finance</p>
+</div>
+""", unsafe_allow_html=True)
 
-# Sidebar with enhanced design
-with st.sidebar:
-    st.markdown("""
-    <div style='text-align: center; padding: 20px; background: white; border-radius: 10px; margin-bottom: 20px;'>
-        <h2 style='margin: 0; color: #2c3e50; border: none;'>⚙️ Strategy Controls</h2>
-    </div>
-    """, unsafe_allow_html=True)
+# Predefined stock lists (no Wikipedia needed!)
+POPULAR_STOCKS = {
+    "Tech Giants": ["AAPL", "MSFT", "GOOGL", "AMZN", "META", "NVDA", "TSLA", "NFLX"],
+    "Blue Chips": ["JPM", "JNJ", "PG", "WMT", "V", "UNH", "HD", "DIS"],
+    "Growth Stocks": ["TSLA", "NVDA", "AMD", "SHOP", "SQ", "ROKU", "PLTR", "COIN"],
+    "S&P 500 Sample": ["AAPL", "MSFT", "GOOGL", "AMZN", "NVDA", "META", "TSLA", "BRK-B", 
+                       "UNH", "JNJ", "V", "WMT", "JPM", "PG", "MA", "HD", "CVX", "MRK", 
+                       "ABBV", "KO", "PEP", "COST", "AVGO", "LLY", "TMO", "MCD", "CSCO",
+                       "ACN", "ABT", "ADBE", "DHR", "NKE", "CRM", "TXN", "PM", "NEE",
+                       "ORCL", "WFC", "VZ", "BMY", "UPS", "MS", "RTX", "HON", "QCOM",
+                       "INTU", "LOW", "AMGN", "T", "IBM", "CAT"]
+}
+
+# Control Panel in main area
+st.markdown("## ⚙️ Configure Your Strategy")
+
+with st.container():
+    col1, col2, col3, col4 = st.columns(4)
     
-    st.markdown("### 📊 Clustering Parameters")
-    n_clusters = st.slider("Number of Clusters", 3, 10, 5, help="More clusters = finer segmentation")
-    top_n_stocks = st.slider("Portfolio Size", 5, 30, 15, help="Number of stocks to hold")
+    with col1:
+        stock_universe = st.selectbox(
+            "📊 Stock Universe",
+            list(POPULAR_STOCKS.keys()),
+            index=3
+        )
     
-    st.markdown("### 📅 Time Period")
+    with col2:
+        n_clusters = st.slider("🎯 Number of Clusters", 3, 10, 5)
+    
+    with col3:
+        top_n_stocks = st.slider("💼 Portfolio Size", 5, 30, 15)
+    
+    with col4:
+        lookback_period = st.slider("📅 Lookback (days)", 100, 500, 252)
+
+# Date range
+col1, col2, col3 = st.columns([2, 2, 3])
+with col1:
+    start_date = st.date_input("Start Date", datetime(2020, 1, 1))
+with col2:
+    end_date = st.date_input("End Date", datetime(2024, 1, 1))
+with col3:
+    st.markdown("<br>", unsafe_allow_html=True)
+    run_backtest = st.button("🚀 RUN BACKTEST NOW")
+
+# Advanced settings in expander
+with st.expander("⚙️ Advanced Settings"):
     col1, col2 = st.columns(2)
     with col1:
-        start_date = st.date_input("Start", datetime(2015, 1, 1))
+        rebalance_freq = st.slider("Rebalance Frequency (days)", 30, 180, 90)
     with col2:
-        end_date = st.date_input("End", datetime(2024, 1, 1))
-    
-    st.markdown("### 🔄 Advanced Settings")
-    lookback_period = st.slider("Lookback (days)", 100, 500, 252)
-    rebalance_freq = st.slider("Rebalance (days)", 30, 180, 90)
-    
-    st.markdown("---")
-    run_backtest = st.button("🚀 RUN BACKTEST", type="primary")
-    
-    if run_backtest:
-        st.session_state.run = True
-    
-    st.markdown("---")
-    st.markdown("""
-    <div style='background: white; padding: 15px; border-radius: 10px; margin-top: 20px;'>
-        <h4 style='color: #2c3e50; margin-top: 0;'>💡 Quick Tips</h4>
-        <ul style='color: #7f8c8d; font-size: 0.9rem;'>
-            <li>5 clusters works well for most cases</li>
-            <li>Longer periods = more stable results</li>
-            <li>Rebalance quarterly (90 days)</li>
-        </ul>
-    </div>
-    """, unsafe_allow_html=True)
+        min_data_threshold = st.slider("Min Data Completeness (%)", 50, 100, 80)
 
-@st.cache_data(show_spinner=False)
-def download_sp500_tickers():
-    """Download S&P 500 tickers from Wikipedia"""
-    sp500 = pd.read_html("https://en.wikipedia.org/wiki/List_of_S%26P_500_companies")[0]
-    return sp500['Symbol'].tolist()[:100]
+if run_backtest:
+    st.session_state.run = True
 
 @st.cache_data(show_spinner=False)
 def download_stock_data(tickers, start, end):
     """Download stock data"""
     data = yf.download(tickers, start=start, end=end, progress=False)['Adj Close']
+    if isinstance(data, pd.Series):
+        data = data.to_frame(name=tickers[0])
     data = data.dropna(axis=1, thresh=len(data)*0.8)
     return data
 
@@ -227,19 +296,20 @@ def calculate_portfolio_performance(data, selected_stocks):
 # Main execution
 if 'run' in st.session_state and st.session_state.run:
     try:
-        # Progress tracking with better UI
         progress_bar = st.progress(0)
         status_text = st.empty()
         
-        status_text.markdown("### 🔄 Downloading S&P 500 tickers...")
-        progress_bar.progress(10)
-        tickers = download_sp500_tickers()
+        # Get tickers
+        tickers = POPULAR_STOCKS[stock_universe]
         
-        status_text.markdown(f"### ✅ Found {len(tickers)} tickers")
-        progress_bar.progress(25)
+        status_text.markdown("### 📊 Downloading stock data...")
+        progress_bar.progress(20)
         
-        status_text.markdown("### 📈 Downloading stock data...")
         data = download_stock_data(tickers, start_date, end_date)
+        
+        if data is None or len(data) < 50:
+            st.error("❌ Insufficient data. Please adjust date range.")
+            st.stop()
         
         status_text.markdown(f"### ✅ Downloaded data for {len(data.columns)} stocks")
         progress_bar.progress(40)
@@ -256,102 +326,20 @@ if 'run' in st.session_state and st.session_state.run:
         status_text.markdown(f"### ✅ Clustered stocks into {n_clusters} groups")
         progress_bar.progress(80)
         
-        status_text.markdown("### 💰 Calculating portfolio performance...")
-        progress_bar.progress(90)
+        # Select best cluster
+        cluster_stats = features_clustered.groupby('cluster').agg({
+            'mean_return': 'mean',
+            'volatility': 'mean',
+            'sharpe_ratio': 'mean',
+            'momentum_12m': 'mean'
+        })
+        cluster_stats['count'] = features_clustered.groupby('cluster').size()
         
-        # Clear progress indicators
-        progress_bar.progress(100)
-        status_text.empty()
-        progress_bar.empty()
-        
-        # Success message
-        st.success("🎉 Analysis Complete! Scroll down to see results.")
-        
-        # RESULTS SECTION
-        st.markdown("<br>", unsafe_allow_html=True)
-        
-        # Cluster Analysis
-        st.markdown("## 📊 Cluster Analysis")
-        
-        col1, col2 = st.columns([1, 1])
-        
-        with col1:
-            st.markdown("### 📈 Cluster Statistics")
-            cluster_stats = features_clustered.groupby('cluster').agg({
-                'mean_return': 'mean',
-                'volatility': 'mean',
-                'sharpe_ratio': 'mean',
-                'momentum_12m': 'mean'
-            }).round(4)
-            cluster_stats['count'] = features_clustered.groupby('cluster').size()
-            cluster_stats.columns = ['Avg Return', 'Avg Vol', 'Avg Sharpe', 'Momentum', 'Stocks']
-            
-            # Style the dataframe
-            styled_df = cluster_stats.style.background_gradient(cmap='RdYlGn', subset=['Avg Sharpe'])
-            st.dataframe(styled_df, use_container_width=True)
-        
-        with col2:
-            st.markdown("### 🎯 Cluster Visualization (PCA)")
-            
-            # Create interactive plotly scatter
-            fig = go.Figure()
-            
-            for cluster in range(n_clusters):
-                mask = features_clustered['cluster'] == cluster
-                fig.add_trace(go.Scatter(
-                    x=X_pca[mask, 0],
-                    y=X_pca[mask, 1],
-                    mode='markers',
-                    name=f'Cluster {cluster}',
-                    marker=dict(size=10, opacity=0.7),
-                    hovertemplate='<b>Cluster %{text}</b><br>PC1: %{x:.2f}<br>PC2: %{y:.2f}',
-                    text=[cluster] * sum(mask)
-                ))
-            
-            fig.update_layout(
-                xaxis_title=f'PC1 ({pca.explained_variance_ratio_[0]:.1%} var)',
-                yaxis_title=f'PC2 ({pca.explained_variance_ratio_[1]:.1%} var)',
-                height=400,
-                hovermode='closest',
-                plot_bgcolor='rgba(0,0,0,0)',
-                paper_bgcolor='rgba(0,0,0,0)',
-            )
-            
-            st.plotly_chart(fig, use_container_width=True)
-        
-        # Best Cluster Selection
-        best_cluster = cluster_stats['Avg Sharpe'].idxmax()
-        
-        st.markdown(f"""
-        <div class='info-box'>
-            <h3 style='margin-top: 0; color: white;'>🎯 Best Performing Cluster: Cluster {best_cluster}</h3>
-            <p style='font-size: 1.1rem; margin: 0;'>
-                <b>Sharpe Ratio:</b> {cluster_stats.loc[best_cluster, 'Avg Sharpe']:.3f} | 
-                <b>Stocks:</b> {int(cluster_stats.loc[best_cluster, 'Stocks'])} | 
-                <b>Avg Return:</b> {cluster_stats.loc[best_cluster, 'Avg Return']*100:.2f}%
-            </p>
-        </div>
-        """, unsafe_allow_html=True)
-        
-        # Selected Stocks
+        best_cluster = cluster_stats['sharpe_ratio'].idxmax()
         cluster_stocks = features_clustered[features_clustered['cluster'] == best_cluster]
         top_stocks = cluster_stocks.nlargest(top_n_stocks, 'sharpe_ratio').index.tolist()
         
-        st.markdown("### 📋 Selected Portfolio Stocks")
-        
-        selected_df = cluster_stocks.loc[top_stocks][['mean_return', 'volatility', 'sharpe_ratio', 'momentum_12m', 'rsi']]
-        selected_df.columns = ['Annual Return', 'Volatility', 'Sharpe', '12M Momentum', 'RSI']
-        selected_df = (selected_df * 100).round(2)
-        
-        # Display as interactive table
-        st.dataframe(
-            selected_df.style.background_gradient(cmap='RdYlGn', subset=['Sharpe']),
-            use_container_width=True
-        )
-        
-        # Portfolio Performance
-        st.markdown("## 💰 Portfolio Performance")
-        
+        status_text.markdown("### 💰 Calculating portfolio performance...")
         portfolio_returns, cumulative_returns = calculate_portfolio_performance(data, top_stocks)
         
         # Download benchmark
@@ -366,48 +354,16 @@ if 'run' in st.session_state and st.session_state.run:
         cumulative_returns = cumulative_returns.loc[common_dates]
         sp500_cumulative = sp500_cumulative.loc[common_dates]
         
-        # Interactive Performance Chart
-        fig = go.Figure()
+        progress_bar.progress(100)
+        status_text.empty()
+        progress_bar.empty()
         
-        fig.add_trace(go.Scatter(
-            x=cumulative_returns.index,
-            y=(cumulative_returns - 1) * 100,
-            name='AI Strategy',
-            line=dict(color='#667eea', width=3),
-            fill='tonexty',
-            hovertemplate='<b>AI Strategy</b><br>Date: %{x}<br>Return: %{y:.2f}%<extra></extra>'
-        ))
+        st.success("🎉 Analysis Complete!")
         
-        fig.add_trace(go.Scatter(
-            x=sp500_cumulative.index,
-            y=(sp500_cumulative - 1) * 100,
-            name='S&P 500',
-            line=dict(color='#ff6b6b', width=3, dash='dash'),
-            hovertemplate='<b>S&P 500</b><br>Date: %{x}<br>Return: %{y:.2f}%<extra></extra>'
-        ))
+        # RESULTS
+        st.markdown("## 📊 Performance Overview")
         
-        fig.update_layout(
-            title='Cumulative Returns Over Time',
-            xaxis_title='Date',
-            yaxis_title='Cumulative Return (%)',
-            height=500,
-            hovermode='x unified',
-            plot_bgcolor='rgba(0,0,0,0)',
-            paper_bgcolor='rgba(0,0,0,0)',
-            legend=dict(
-                orientation="h",
-                yanchor="bottom",
-                y=1.02,
-                xanchor="right",
-                x=1
-            )
-        )
-        
-        st.plotly_chart(fig, use_container_width=True)
-        
-        # Performance Metrics
-        st.markdown("### 📈 Key Performance Metrics")
-        
+        # Calculate metrics
         total_return = (cumulative_returns.iloc[-1] - 1) * 100
         sp500_total_return = (sp500_cumulative.iloc[-1] - 1) * 100
         
@@ -422,241 +378,153 @@ if 'run' in st.session_state and st.session_state.run:
         col1, col2, col3, col4 = st.columns(4)
         
         with col1:
-            delta_color = "normal" if total_return > sp500_total_return else "inverse"
             st.metric(
                 "Total Return",
                 f"{total_return:.2f}%",
-                delta=f"{total_return - sp500_total_return:.2f}% vs S&P500",
-                delta_color=delta_color
+                delta=f"{total_return - sp500_total_return:.2f}% vs S&P500"
             )
         
         with col2:
-            delta_color = "normal" if ann_return > sp500_ann_return else "inverse"
             st.metric(
                 "Annual Return",
                 f"{ann_return:.2f}%",
-                delta=f"{ann_return - sp500_ann_return:.2f}% vs S&P500",
-                delta_color=delta_color
+                delta=f"{ann_return - sp500_ann_return:.2f}% vs S&P500"
             )
         
         with col3:
-            delta_color = "inverse" if ann_vol < sp500_ann_vol else "normal"
+            st.metric(
+                "Sharpe Ratio",
+                f"{sharpe:.3f}",
+                delta=f"{sharpe - sp500_sharpe:.3f} vs S&P500"
+            )
+        
+        with col4:
             st.metric(
                 "Volatility",
                 f"{ann_vol:.2f}%",
                 delta=f"{ann_vol - sp500_ann_vol:.2f}% vs S&P500",
-                delta_color=delta_color
+                delta_color="inverse"
             )
         
-        with col4:
-            delta_color = "normal" if sharpe > sp500_sharpe else "inverse"
-            st.metric(
-                "Sharpe Ratio",
-                f"{sharpe:.3f}",
-                delta=f"{sharpe - sp500_sharpe:.3f} vs S&P500",
-                delta_color=delta_color
-            )
-        
-        # Additional Analysis
-        st.markdown("## 🔍 Advanced Analytics")
-        
-        col1, col2 = st.columns(2)
-        
-        with col1:
-            # Rolling Sharpe
-            st.markdown("### Rolling Sharpe Ratio (1Y)")
-            rolling_window = 252
-            rolling_sharpe = (portfolio_returns.rolling(rolling_window).mean() / 
-                             portfolio_returns.rolling(rolling_window).std()) * np.sqrt(252)
-            
-            fig = go.Figure()
-            fig.add_trace(go.Scatter(
-                x=rolling_sharpe.index,
-                y=rolling_sharpe,
-                fill='tozeroy',
-                line=dict(color='#667eea', width=2),
-                hovertemplate='Date: %{x}<br>Sharpe: %{y:.3f}<extra></extra>'
-            ))
-            fig.add_hline(y=0, line_dash="dash", line_color="red", opacity=0.5)
-            fig.update_layout(
-                height=350,
-                yaxis_title='Sharpe Ratio',
-                plot_bgcolor='rgba(0,0,0,0)',
-                paper_bgcolor='rgba(0,0,0,0)',
-            )
-            st.plotly_chart(fig, use_container_width=True)
-        
-        with col2:
-            # Drawdown Analysis
-            st.markdown("### Drawdown Analysis")
-            cumulative = (1 + portfolio_returns).cumprod()
-            running_max = cumulative.cummax()
-            drawdown = (cumulative - running_max) / running_max * 100
-            
-            fig = go.Figure()
-            fig.add_trace(go.Scatter(
-                x=drawdown.index,
-                y=drawdown,
-                fill='tozeroy',
-                line=dict(color='#ff6b6b', width=2),
-                hovertemplate='Date: %{x}<br>Drawdown: %{y:.2f}%<extra></extra>'
-            ))
-            fig.update_layout(
-                height=350,
-                yaxis_title='Drawdown (%)',
-                plot_bgcolor='rgba(0,0,0,0)',
-                paper_bgcolor='rgba(0,0,0,0)',
-            )
-            st.plotly_chart(fig, use_container_width=True)
-        
-        # Feature Importance
-        st.markdown("### 🎯 Feature Analysis")
-        
-        feature_names = ['Mean Return', 'Volatility', 'Sharpe', 'Mom 1M', 'Mom 3M', 'Mom 6M', 'Mom 12M', 'RSI', 'Max DD']
-        feature_std = features_clustered.drop('cluster', axis=1).std()
+        # Performance Chart
+        st.markdown("## 💹 Cumulative Returns")
         
         fig = go.Figure()
-        fig.add_trace(go.Bar(
-            x=feature_names,
-            y=feature_std.values,
-            marker=dict(
-                color=feature_std.values,
-                colorscale='Viridis',
-                showscale=True,
-                colorbar=dict(title="Std Dev")
-            ),
-            hovertemplate='<b>%{x}</b><br>Std Dev: %{y:.4f}<extra></extra>'
+        
+        fig.add_trace(go.Scatter(
+            x=cumulative_returns.index,
+            y=(cumulative_returns - 1) * 100,
+            name='AI Strategy',
+            line=dict(color='#667eea', width=3),
+            fill='tonexty'
+        ))
+        
+        fig.add_trace(go.Scatter(
+            x=sp500_cumulative.index,
+            y=(sp500_cumulative - 1) * 100,
+            name='S&P 500',
+            line=dict(color='#764ba2', width=3, dash='dash')
         ))
         
         fig.update_layout(
-            title='Feature Variability (Higher = More Important for Clustering)',
-            height=400,
-            xaxis_title='Features',
-            yaxis_title='Standard Deviation',
+            height=500,
+            xaxis_title='Date',
+            yaxis_title='Cumulative Return (%)',
+            hovermode='x unified',
             plot_bgcolor='rgba(0,0,0,0)',
             paper_bgcolor='rgba(0,0,0,0)',
+            legend=dict(
+                orientation="h",
+                yanchor="bottom",
+                y=1.02,
+                xanchor="right",
+                x=1
+            )
         )
         
         st.plotly_chart(fig, use_container_width=True)
         
+        # Cluster Analysis
+        col1, col2 = st.columns(2)
+        
+        with col1:
+            st.markdown("### 📈 Cluster Statistics")
+            cluster_stats_display = cluster_stats.round(4)
+            cluster_stats_display.columns = ['Avg Return', 'Avg Vol', 'Avg Sharpe', 'Momentum', 'Count']
+            st.dataframe(
+                cluster_stats_display.style.background_gradient(cmap='RdYlGn', subset=['Avg Sharpe']),
+                use_container_width=True
+            )
+        
+        with col2:
+            st.markdown("### 🎯 PCA Visualization")
+            
+            fig = go.Figure()
+            
+            for cluster in range(n_clusters):
+                mask = features_clustered['cluster'] == cluster
+                fig.add_trace(go.Scatter(
+                    x=X_pca[mask, 0],
+                    y=X_pca[mask, 1],
+                    mode='markers',
+                    name=f'Cluster {cluster}',
+                    marker=dict(size=12, opacity=0.7)
+                ))
+            
+            fig.update_layout(
+                height=400,
+                xaxis_title=f'PC1 ({pca.explained_variance_ratio_[0]:.1%})',
+                yaxis_title=f'PC2 ({pca.explained_variance_ratio_[1]:.1%})',
+                plot_bgcolor='rgba(0,0,0,0)',
+                paper_bgcolor='rgba(0,0,0,0)',
+            )
+            
+            st.plotly_chart(fig, use_container_width=True)
+        
+        # Selected Stocks
+        st.markdown(f"### 📋 Selected Portfolio ({len(top_stocks)} stocks from Cluster {best_cluster})")
+        
+        selected_df = cluster_stocks.loc[top_stocks][['mean_return', 'volatility', 'sharpe_ratio', 'momentum_12m']]
+        selected_df.columns = ['Annual Return', 'Volatility', 'Sharpe', '12M Momentum']
+        selected_df = (selected_df * 100).round(2)
+        
+        st.dataframe(
+            selected_df.style.background_gradient(cmap='RdYlGn', subset=['Sharpe']),
+            use_container_width=True
+        )
+        
     except Exception as e:
-        st.error(f"❌ Error occurred: {str(e)}")
-        st.exception(e)
+        st.error(f"❌ Error: {str(e)}")
+        with st.expander("See error details"):
+            st.exception(e)
 
 else:
     # Landing page
     st.markdown("""
     <div class='info-box'>
-        <h2 style='margin-top: 0; color: white;'>👋 Welcome to AI Trading Strategy</h2>
-        <p style='font-size: 1.1rem;'>
-            Configure your parameters in the sidebar and click <b>"RUN BACKTEST"</b> to start the analysis!
+        <h3>🚀 Ready to Get Started?</h3>
+        <p style='font-size: 1.1rem; margin: 0;'>
+            Configure your strategy above and click <b>"RUN BACKTEST NOW"</b> to see the magic happen!
         </p>
     </div>
     """, unsafe_allow_html=True)
     
-    # Feature showcase
     col1, col2, col3 = st.columns(3)
     
     with col1:
         st.markdown("""
-        <div class='metric-card'>
-            <h3>🤖 Machine Learning</h3>
-            <p>K-Means clustering identifies stocks with similar risk-return profiles</p>
-        </div>
-        """, unsafe_allow_html=True)
+        ### 🤖 Machine Learning
+        Uses K-Means clustering to group stocks by similar characteristics
+        """)
     
     with col2:
         st.markdown("""
-        <div class='metric-card'>
-            <h3>📊 Technical Analysis</h3>
-            <p>9 advanced features including momentum, RSI, and Sharpe ratio</p>
-        </div>
-        """, unsafe_allow_html=True)
+        ### 📊 Data-Driven
+        Analyzes 9 technical indicators including momentum and RSI
+        """)
     
     with col3:
         st.markdown("""
-        <div class='metric-card'>
-            <h3>💹 Portfolio Optimization</h3>
-            <p>Systematic selection from best-performing cluster</p>
-        </div>
-        """, unsafe_allow_html=True)
-    
-    st.markdown("## 📚 How It Works")
-    
-    tab1, tab2, tab3 = st.tabs(["📖 Methodology", "🎯 Features", "💼 For Internships"])
-    
-    with tab1:
-        st.markdown("""
-        ### The Strategy Pipeline
-        
-        1. **Data Collection** 📥
-           - Downloads S&P 500 historical data via Yahoo Finance
-           - Filters stocks with sufficient trading history
-        
-        2. **Feature Engineering** 🔧
-           - Calculates 9 technical indicators per stock
-           - Includes returns, volatility, momentum, RSI, drawdown
-        
-        3. **Clustering** 🎯
-           - Standardizes features using StandardScaler
-           - Groups stocks using K-Means algorithm
-           - Visualizes clusters via PCA projection
-        
-        4. **Selection** ⭐
-           - Identifies best cluster by Sharpe ratio
-           - Selects top N stocks from that cluster
-        
-        5. **Backtesting** 📊
-           - Equal-weight portfolio construction
-           - Compares vs S&P 500 benchmark
-           - Calculates comprehensive performance metrics
-        """)
-    
-    with tab2:
-        st.markdown("""
-        ### Technical Features Explained
-        
-        | Feature | Description | Importance |
-        |---------|-------------|------------|
-        | **Mean Return** | Annualized average return | Profitability measure |
-        | **Volatility** | Standard deviation of returns | Risk measure |
-        | **Sharpe Ratio** | Risk-adjusted return | Quality measure |
-        | **Momentum (1M-12M)** | Price change over period | Trend strength |
-        | **RSI** | Relative Strength Index | Overbought/oversold |
-        | **Max Drawdown** | Largest peak-to-trough decline | Downside risk |
-        
-        All features are standardized before clustering to ensure equal weighting.
-        """)
-    
-    with tab3:
-        st.markdown("""
-        ### Why This Impresses for Quant Internships
-        
-        ✅ **Demonstrates ML Skills**
-        - Unsupervised learning (K-Means, PCA)
-        - Feature engineering and scaling
-        - Hyperparameter tuning
-        
-        ✅ **Shows Financial Domain Knowledge**
-        - Risk-adjusted returns (Sharpe ratio)
-        - Technical indicators (RSI, momentum, drawdown)
-        - Portfolio construction and rebalancing
-        
-        ✅ **Proves Software Engineering Ability**
-        - Clean, modular code architecture
-        - Data caching for performance
-        - Professional UI/UX design
-        - Error handling and validation
-        
-        ✅ **Includes Proper Backtesting**
-        - Benchmark comparison
-        - Multiple performance metrics
-        - Rolling analysis windows
-        - Drawdown visualization
-        
-        ✅ **Production-Ready Application**
-        - Interactive Streamlit dashboard
-        - Plotly visualizations
-        - Configurable parameters
-        - Export-ready results
+        ### 💹 Proven Strategy
+        Systematic selection based on risk-adjusted returns
         """)
